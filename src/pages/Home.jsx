@@ -3,7 +3,7 @@ import CalendarGrid from '../components/calendar/CalendarGrid';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import Footer from '../components/layout/Footer';
 import Navbar from '../components/layout/Navbar';
-import { getHolidays } from '../services/HolidayAPI';
+import { getHolidays } from '../services/HolidayApi';
 
 export default function Home() {
     const [currentDate, setCurrentDate] = useState(new Date());
