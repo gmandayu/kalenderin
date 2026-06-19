@@ -1,29 +1,39 @@
-export default function CalendarGrid() {
-	return (
-		<section id="kalender" className="rounded-3xl border bg-white p-4 shadow-sm">
-			<div className="mb-4 flex items-center justify-between">
-				<button className="rounded-xl border px-4 py-2 text-sm">Sebelumnya</button>
+import CalendarCell from './CalendarCell';
 
-				<h2 className="text-lg font-bold">Mei 2026</h2>
+const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
-				<button className="rounded-xl border px-4 py-2 text-sm">Berikutnya</button>
-			</div>
+export default function CalendarGrid({ currentDate }) {
+    const today = new Date();
 
-			<div className="grid grid-cols-7 gap-2 text-center text-sm font-semibold text-slate-500">
-				{['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((day) => (
-					<div key={day} className="py-2">
-						{day}
-					</div>
-				))}
-			</div>
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-			<div className="mt-2 grid grid-cols-7 gap-2">
-				{Array.from({ length: 31 }).map((_, index) => (
-					<div key={index} className="min-h-20 rounded-2xl border border-slate-100 p-2 text-sm hover:bg-slate-50">
-						<span className="font-bold">{index + 1}</span>
-					</div>
-				))}
-			</div>
-		</section>
-	);
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay();
+
+    const calendarDays = [...Array.from({ length: firstDayIndex }, () => null), ...Array.from({ length: totalDays }, (_, index) => index + 1)];
+
+    return (
+        <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-5 md:p-6">
+            <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 sm:gap-2 sm:text-sm">
+                {dayNames.map((day) => (
+                    <div key={day} className="py-2">
+                        {day}
+                    </div>
+                ))}
+            </div>
+
+            <div className="mt-2 grid grid-cols-7 gap-1 sm:mt-4 sm:gap-2">
+                {calendarDays.map((day, index) => {
+                    if (!day) {
+                        return <CalendarCell key={`empty-${index}`} />;
+                    }
+                    const date = new Date(year, month, day);
+                    const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+                    const isSunday = date.getDay() === 0;
+                    return <CalendarCell key={`${year}-${month}-${day}`} day={day} date={date} isToday={isToday} isSunday={isSunday} />;
+                })}
+            </div>
+        </div>
+    );
 }
