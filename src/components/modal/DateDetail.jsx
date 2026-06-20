@@ -1,6 +1,20 @@
 import { X } from 'lucide-react';
+import { useEffect } from 'react';
+import { getHijriDate } from '../../utils/hijriDate';
 
 export default function DateDetailModal({ selectedDate, onClose }) {
+    useEffect(() => {
+        if (!selectedDate) return;
+
+        const originalOverflow = document.body.style.overflow;
+
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
+    }, [selectedDate]);
+
     if (selectedDate === null) return null;
 
     const { date, holidayName, isHoliday, isNationalHoliday } = selectedDate;
@@ -12,9 +26,17 @@ export default function DateDetailModal({ selectedDate, onClose }) {
         year: 'numeric',
     });
 
+    const hijriDate = getHijriDate(selectedDate?.date);
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-            <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+            onClick={onClose}
+        >
+            <div
+                className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="mb-4 flex items-start justify-between gap-4">
                     <div>
                         <p className="text-sm font-semibold text-blue-600">Detail Hari</p>
@@ -49,6 +71,12 @@ export default function DateDetailModal({ selectedDate, onClose }) {
                             <p className="mt-1 font-semibold">{holidayName}</p>
                         </div>
                     )}
+                </div>
+                <div className="space-y-3 text-sm mt-3">
+                    <div className="rounded-2xl bg-emerald-50 p-4">
+                        <p className="mb-2 text-sm text-emerald-600">Hijriah</p>
+                        <p className="font-semibold text-emerald-900">{hijriDate}</p>
+                    </div>
                 </div>
             </div>
         </div>
