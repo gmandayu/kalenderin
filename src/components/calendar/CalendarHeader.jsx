@@ -1,24 +1,46 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const monthNames = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
+];
 
-export default function CalendarHeader({ currentDate, onPreviousMonth, onNextMonth }) {
+export default function CalendarHeader({ currentDate, onPreviousMonth, onNextMonth, onToday }) {
     return (
-        <div className="relative mx-auto flex w-full max-w-md items-center justify-center sm:max-w-lg">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center gap-3 sm:max-w-lg">
+            <div className="relative flex w-full items-center justify-center">
+                <button
+                    onClick={onPreviousMonth}
+                    className="absolute left-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-gray-700 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                >
+                    <ChevronLeft size={20} />
+                </button>
+                <h2 className="text-xl font-bold">
+                    {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                </h2>
+                <button
+                    onClick={onNextMonth}
+                    className="absolute right-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-gray-700 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                >
+                    <ChevronRight size={20} />
+                </button>
+            </div>
+
             <button
-                onClick={onPreviousMonth}
-                className="absolute left-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-gray-700 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                onClick={onToday}
+                className="rounded-full border border-gray-200 px-4 py-1.5 text-sm font-medium text-gray-600 transition-all hover:border-gray-400 hover:text-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-200"
             >
-                <ChevronLeft size={20} />
-            </button>
-            <h2 className="text-xl font-bold">
-                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </h2>
-            <button
-                onClick={onNextMonth}
-                className="absolute right-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-gray-700 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-500 dark:hover:text-gray-300"
-            >
-                <ChevronRight size={20} />
+                Hari Ini
             </button>
         </div>
     );

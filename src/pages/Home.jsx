@@ -88,6 +88,7 @@ export default function Home() {
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
+                    onToday={() => setCurrentDate(new Date())}
                 />
                 {isLoadingHolidays && <Loading />}
                 {holidayError && (
