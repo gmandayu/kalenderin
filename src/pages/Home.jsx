@@ -4,6 +4,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import Footer from '../components/layout/Footer';
 import Navbar from '../components/layout/Navbar';
 import DateDetailModal from '../components/modal/DateDetail';
+import Loading from '../components/modal/Loading';
 import { getHolidays } from '../services/HolidayApi';
 
 export default function Home() {
@@ -83,11 +84,7 @@ export default function Home() {
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
                 />
-                {isLoadingHolidays && (
-                    <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-                        Memuat data hari libur...
-                    </p>
-                )}
+                {isLoadingHolidays && <Loading />}
                 {holidayError && <p className="mt-4 text-sm text-red-500">{holidayError}</p>}
 
                 <div className="mt-6">
