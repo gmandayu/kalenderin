@@ -1,3 +1,5 @@
+import { getHijriDateShort } from '../../utils/hijriDate';
+
 export default function CalendarCell({
     day,
     date,
@@ -11,6 +13,9 @@ export default function CalendarCell({
     if (!day) {
         return <div className="aspect-square rounded-xl" />;
     }
+
+    const hijriDate = getHijriDateShort(date);
+
     return (
         <div
             className={`
@@ -39,6 +44,12 @@ export default function CalendarCell({
             onClick={onClick}
         >
             <span>{day}</span>
+
+            {hijriDate && (
+                <p className="mt-1 truncate text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                    {hijriDate}
+                </p>
+            )}
 
             {holidayName && (
                 <p className="mt-1 hidden truncate text-[10px] font-medium sm:block">

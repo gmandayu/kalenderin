@@ -4,6 +4,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import Footer from '../components/layout/Footer';
 import Navbar from '../components/layout/Navbar';
 import DateDetailModal from '../components/modal/DateDetail';
+import Loading from '../components/modal/Loading';
 import { getHolidays } from '../services/HolidayApi';
 
 export default function Home() {
@@ -24,15 +25,20 @@ export default function Home() {
                 setHolidayError('');
 
                 if (holidayCacheRef.current[year]) {
-                    setHolidays(holidayCacheRef.current[year]);
+                    const cachedResult = holidayCacheRef.current[year];
+
+                    setHolidays(cachedResult.holidays);
+                    setHolidayError(cachedResult.warning);
                     return;
                 }
 
-                const data = await getHolidays(year);
+                const result = await getHolidays(year);
 
-                holidayCacheRef.current[year] = data;
+                holidayCacheRef.current[year] = result;
+
                 if (isMounted) {
-                    setHolidays(data);
+                    setHolidays(result.holidays);
+                    setHolidayError(result.warning);
                 }
             } catch (error) {
                 if (isMounted) {
@@ -83,12 +89,12 @@ export default function Home() {
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
                 />
-                {isLoadingHolidays && (
-                    <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-                        Memuat data hari libur...
-                    </p>
+                {isLoadingHolidays && <Loading />}
+                {holidayError && (
+                    <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300">
+                        {holidayError}
+                    </div>
                 )}
-                {holidayError && <p className="mt-4 text-sm text-red-500">{holidayError}</p>}
 
                 <div className="mt-6">
                     <CalendarGrid
