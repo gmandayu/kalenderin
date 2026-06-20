@@ -6,6 +6,7 @@ export default function CalendarCell({
     isHoliday,
     holidayName,
     isNationalHoliday,
+    onClick,
 }) {
     if (!day) {
         return <div className="aspect-square rounded-xl" />;
@@ -13,7 +14,7 @@ export default function CalendarCell({
     return (
         <div
             className={`
-                aspect-square rounded-xl border p-1.5 text-xs font-bold transition sm:rounded-2xl sm:p-3 sm:text-sm
+                aspect-square rounded-xl border p-1.5 text-xs font-bold transition sm:rounded-2xl sm:p-3 sm:text-sm cursor-pointer
                 ${
                     isToday
                         ? 'border-blue-600 bg-blue-600 text-white shadow-md'
@@ -35,6 +36,7 @@ export default function CalendarCell({
                     day: 'numeric',
                 })
             }
+            onClick={onClick}
         >
             <span>{day}</span>
 

@@ -3,6 +3,7 @@ import CalendarGrid from '../components/calendar/CalendarGrid';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import Footer from '../components/layout/Footer';
 import Navbar from '../components/layout/Navbar';
+import DateDetailModal from '../components/modal/DateDetail';
 import { getHolidays } from '../services/HolidayApi';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
     const [holidays, setHolidays] = useState([]);
     const [isLoadingHolidays, setIsLoadingHolidays] = useState(false);
     const [holidayError, setHolidayError] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const year = currentDate.getFullYear();
     const holidayCacheRef = useRef({});
@@ -52,14 +54,10 @@ export default function Home() {
     }, [year]);
 
     const handlePreviousMonth = () => {
-        setCurrentDate(
-            new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-        );
+        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
     };
     const handleNextMonth = () => {
-        setCurrentDate(
-            new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-        );
+        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
     };
 
     return (
@@ -70,14 +68,12 @@ export default function Home() {
             <Navbar />
             <section className="mx-auto max-w-6xl px-4 py-8">
                 <div className="mb-4">
-                    <h1 className="text-3xl font-bold md:text-5xl">
-                        Kalenderin hari kamu.
-                    </h1>
+                    <h1 className="text-3xl font-bold md:text-5xl">Kalenderin hari kamu.</h1>
                 </div>
                 <div className="mb-4 rounded-r-lg border-l-4 border-gray-300 bg-gray-50 py-3 pl-4 pr-4 dark:border-gray-600 dark:bg-gray-900/50">
                     <p className="mt-3 max-w-2xl text-slate-600">
-                        Cek tanggal merah, kalender hijriyah, weton Jawa, dan
-                        hari penting Indonesia dalam satu tempat.
+                        Cek tanggal merah, kalender hijriyah, weton Jawa, dan hari penting Indonesia
+                        dalam satu tempat.
                     </p>
                 </div>
             </section>
@@ -92,18 +88,19 @@ export default function Home() {
                         Memuat data hari libur...
                     </p>
                 )}
-                {holidayError && (
-                    <p className="mt-4 text-sm text-red-500">{holidayError}</p>
-                )}
+                {holidayError && <p className="mt-4 text-sm text-red-500">{holidayError}</p>}
 
                 <div className="mt-6">
                     <CalendarGrid
                         currentDate={currentDate}
                         holidays={holidays}
+                        onSelectedDate={setSelectedDate}
                     />
                 </div>
             </section>
             <Footer />
+
+            <DateDetailModal selectedDate={selectedDate} onClose={() => setSelectedDate(null)} />
         </main>
     );
 }

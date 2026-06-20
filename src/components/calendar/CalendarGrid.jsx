@@ -9,7 +9,7 @@ function formatDateKey(year, month, day) {
     return `${year}-${monthNumber}-${dayNumber}`;
 }
 
-export default function CalendarGrid({ currentDate, holidays = [] }) {
+export default function CalendarGrid({ currentDate, holidays = [], onSelectedDate = () => {} }) {
     const today = new Date();
 
     const year = currentDate.getFullYear();
@@ -23,8 +23,7 @@ export default function CalendarGrid({ currentDate, holidays = [] }) {
             holiday.holiday_date || holiday.date,
             {
                 name: holiday.holiday_name || holiday.name,
-                isNationalHoliday:
-                    holiday.national_holiday || holiday.is_national_holiday,
+                isNationalHoliday: holiday.national_holiday || holiday.is_national_holiday,
             },
         ])
     );
@@ -71,6 +70,14 @@ export default function CalendarGrid({ currentDate, holidays = [] }) {
                             isHoliday={isHoliday}
                             holidayName={holiday?.name}
                             isNationalHoliday={holiday?.isNationalHoliday}
+                            onClick={() =>
+                                onSelectedDate({
+                                    date,
+                                    holidayName: holiday?.name,
+                                    isHoliday,
+                                    isNationalHoliday: holiday?.isNationalHoliday,
+                                })
+                            }
                         />
                     );
                 })}
