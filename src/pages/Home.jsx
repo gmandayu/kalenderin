@@ -25,15 +25,20 @@ export default function Home() {
                 setHolidayError('');
 
                 if (holidayCacheRef.current[year]) {
-                    setHolidays(holidayCacheRef.current[year]);
+                    const cachedResult = holidayCacheRef.current[year];
+
+                    setHolidays(cachedResult.holidays);
+                    setHolidayError(cachedResult.warning);
                     return;
                 }
 
-                const data = await getHolidays(year);
+                const result = await getHolidays(year);
 
-                holidayCacheRef.current[year] = data;
+                holidayCacheRef.current[year] = result;
+
                 if (isMounted) {
-                    setHolidays(data);
+                    setHolidays(result.holidays);
+                    setHolidayError(result.warning);
                 }
             } catch (error) {
                 if (isMounted) {
@@ -85,7 +90,11 @@ export default function Home() {
                     onNextMonth={handleNextMonth}
                 />
                 {isLoadingHolidays && <Loading />}
-                {holidayError && <p className="mt-4 text-sm text-red-500">{holidayError}</p>}
+                {holidayError && (
+                    <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300">
+                        {holidayError}
+                    </div>
+                )}
 
                 <div className="mt-6">
                     <CalendarGrid
